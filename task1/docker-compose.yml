@@ -1,0 +1,30 @@
+version: '3'
+
+services:
+  short_url:
+    build: ./short_url
+    command: python manage.py runserver 0.0.0.0:8000
+    ports:
+      - '127.0.0.1:8000:8000'
+    volumes:
+      - ./short_url:/short_url
+    env_file: .env_file
+    depends_on:
+        db:
+          condition: service_healthy
+    restart: on-failure
+
+  db:
+    image: mysql
+    ports:
+      - '3306:3306'
+    env_file: .env_file
+    volumes:
+      - ./mysql:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
+      interval: 5s
+      timeout: 20s
+      retries: 10
+    restart: on-failure
+ 

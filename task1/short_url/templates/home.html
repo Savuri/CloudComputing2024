@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>Shortify</h1>
+<div class="shorten-url">
+    <form class="site-form" action="{% url 'url:home' %}" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form }}
+        <input type="submit">
+    </form>
+    {% if generated is not None %}
+        <div class="generated-link">Short url: {{ generated }}</div>
+    {% endif %}
+{% endblock %}
